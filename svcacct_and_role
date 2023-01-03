@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: sandry
+  namespace: kubernetes-dashboard
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+ name: admin
+ namespace: cep-project1
+rules:
+- apiGroups: ["*"]
+  resources: ["*"]
+  verbs:
+   - get
+   - list
+   - watch
+   - create
+   - update
+   - patch
+   - delete
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: sandry-admin-binding
+  namespace: cep-project1
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: admin
+subjects:
+  - kind: ServiceAccount
+    name: sandry
+    namespace: kubernetes-dashboard
+---
