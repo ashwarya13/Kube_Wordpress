@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cep-project1
+  labels:
+    name: cep-project1
+---
