@@ -144,6 +144,15 @@ spec:
           claimName: mysql-pv-claim
 ---
 apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: wp-config-map
+  namespace: cep-project1
+data:
+  WORDPRESS_DB_HOST: wordpress-mysql
+  WORDPRESS_DB_USER: root
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: wordpress
@@ -221,13 +230,15 @@ spec:
       containers:
       - image: wordpress:4.8-apache
         name: wordpress
+        envFrom:
+                - configMapRef:
+                        name: wp-config-map
         env:
-        - name: WORDPRESS_DB_HOST
-          value: wordpress-mysql
-        - name: WORDPRESS_DB_USER
-          value: root
         - name: WORDPRESS_DB_PASSWORD
-          value: mysecretpassword
+          valueFrom:
+                  secretKeyRef:
+                          name: mysql-pass
+                          key: password
         ports:
         - containerPort: 80
           name: wordpress
